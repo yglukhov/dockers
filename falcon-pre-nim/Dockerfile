@@ -12,7 +12,7 @@ ENV EMSCRIPTEN_VERSION=1.36.4 \
 RUN echo deb http://http.debian.net/debian jessie-backports main contrib non-free >> /etc/apt/sources.list \
     && apt-get update \
     && apt-get install -y gcc g++ mercurial git nodejs libopenal-dev libgtk-3-0 libav-tools iceweasel \
-        s3cmd unzip default-jdk fonts-dejavu-core xvfb cmake curl libxext-dev \
+        s3cmd unzip default-jdk fonts-dejavu-core xvfb cmake curl libsdl2-dev \
     && echo "    IdentityFile ~/.ssh/id_rsa" >> /etc/ssh/ssh_config \
     && mkdir /onQuit.d \
     && echo 'Xvfb :1 -screen 0 1024x768x16 +extension RANDR &' > /onStart.d/010-start-x-server.sh \
@@ -58,7 +58,7 @@ RUN echo deb http://http.debian.net/debian jessie-backports main contrib non-fre
     && rm -r emscripten-fastcomp \
     \
     && echo "CLEANUP" \
-    && apt-get remove -y unzip cmake curl libxext-dev g++ \
+    && apt-get remove -y unzip cmake curl libsdl2-dev g++ \
     && apt-get autoremove -y \
     && apt-get clean all \
     && rm -rf /var/lib/apt/lists/* \
