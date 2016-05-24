@@ -7,5 +7,5 @@ RUN git clone --depth 1 https://github.com/nim-lang/nim.git \
     && sh ./bootstrap.sh \
     && cd - \
     && git clone --depth 1 https://github.com/nim-lang/nimble.git \
-    && nim c -r nimble/src/nimble install -y nimble \
+    && nim c -r nimble/src/nimble install -y 'nimble@#head' \
     && rm -rf ./nim/nimcache ./nim/compiler/nimcache ./nim/csources ./nimble
