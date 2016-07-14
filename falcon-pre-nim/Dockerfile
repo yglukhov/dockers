@@ -4,15 +4,15 @@ MAINTAINER Yuriy Glukhov <yuriy.glukhov@gmail.com>
 ADD run.sh /bin/run
 ADD 005-nim-version.sh /onStart.d/005-nim-version.sh
 
-ENV EMSCRIPTEN_VERSION=1.36.4 \
+ENV EMSCRIPTEN_VERSION=1.36.5 \
     LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/ \
     DISPLAY=:1.0 \
     PATH=$PATH:/nim/bin:/root/.nimble/bin:/emscripten
 
 RUN echo deb http://http.debian.net/debian jessie-backports main contrib non-free >> /etc/apt/sources.list \
-    && apt-get update \
-    && apt-get install -y gcc g++ mercurial git nodejs libopenal-dev libgtk-3-0 libav-tools iceweasel \
-        s3cmd unzip default-jdk fonts-dejavu-core xvfb cmake curl libsdl2-dev \
+    && while ! apt-get update; do true; done \
+    && while ! apt-get install -y gcc g++ mercurial git nodejs libopenal-dev libgtk-3-0 libav-tools iceweasel \
+        s3cmd unzip default-jdk fonts-dejavu-core xvfb cmake curl libsdl2-dev; do true; done \
     && echo "    IdentityFile ~/.ssh/id_rsa" >> /etc/ssh/ssh_config \
     && mkdir /onQuit.d \
     && echo 'Xvfb :1 -screen 0 1024x768x16 +extension RANDR &' > /onStart.d/010-start-x-server.sh \
