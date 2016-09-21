@@ -1,34 +1,20 @@
-FROM debian:stable
+FROM debian:stretch
 MAINTAINER Yuriy Glukhov <yuriy.glukhov@gmail.com>
 
 ADD run.sh /bin/run
 ADD 005-nim-version.sh /onStart.d/005-nim-version.sh
 
-ENV EMSCRIPTEN_VERSION=1.36.5 \
+ENV EMSCRIPTEN_VERSION=1.36.9 \
     LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/ \
     DISPLAY=:1.0 \
     PATH=$PATH:/nim/bin:/root/.nimble/bin:/emscripten
 
-RUN echo deb http://http.debian.net/debian jessie-backports main contrib non-free >> /etc/apt/sources.list \
-    && while ! apt-get update; do true; done \
+RUN while ! apt-get update; do true; done \
     && while ! apt-get install -y gcc g++ mercurial git nodejs libopenal-dev libgtk-3-0 libav-tools iceweasel \
-        s3cmd unzip default-jdk fonts-dejavu-core xvfb cmake curl libsdl2-dev; do true; done \
+        s3cmd default-jdk fonts-dejavu-core xvfb curl libsdl2-dev make cmake libssl-dev pngquant; do true; done \
     && echo "    IdentityFile ~/.ssh/id_rsa" >> /etc/ssh/ssh_config \
     && mkdir /onQuit.d \
     && echo 'Xvfb :1 -screen 0 1024x768x16 +extension RANDR &' > /onStart.d/010-start-x-server.sh \
-    \
-    && echo "DOWNLOADING SDL" \
-    && curl -O https://www.libsdl.org/release/SDL2-2.0.4.zip \
-    && unzip -qq SDL2-2.0.4.zip \
-    && rm SDL2-2.0.4.zip \
-    \
-    && mkdir -p ~/Projects \
-    && mv SDL2-2.0.4 ~/Projects/SDL \
-    \
-    && echo "BUILDING SDL" \
-    && cd ~/Projects/SDL \
-    && ./configure --disable-video-wayland && make install && make clean && cd - \
-    && rm -rf ~/Projects/SDL/test \
     \
     && echo "DOWNLOADING EMSCRIPTEN" \
     && curl -LO https://github.com/kripken/emscripten/archive/$EMSCRIPTEN_VERSION.tar.gz \
@@ -58,14 +44,14 @@ RUN echo deb http://http.debian.net/debian jessie-backports main contrib non-fre
     && rm -r emscripten-fastcomp \
     \
     && echo "CLEANUP" \
-    && apt-get remove -y unzip cmake curl libsdl2-dev g++ \
+    && apt-get remove -y cmake curl g++ \
     && apt-get autoremove -y \
     && apt-get clean all \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /usr/share/doc \
     && rm -rf /usr/share/man \
     && rm -rf /usr/share/locale \
-    && emcc
+    && emcc -v && emcc -v
 
 # && echo "DOWNLOADING ANDROID NDK" \
 # && curl -O http://dl.google.com/android/repository/android-ndk-r11c-linux-x86_64.zip \
