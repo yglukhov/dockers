@@ -11,7 +11,7 @@ ENV EMSCRIPTEN_VERSION=1.36.9 \
 
 RUN while ! apt-get update; do true; done \
     && while ! apt-get install -y gcc g++ mercurial git nodejs libopenal-dev libgtk-3-0 libav-tools iceweasel \
-        s3cmd default-jdk fonts-dejavu-core xvfb curl libsdl2-dev make cmake libssl-dev pngquant; do true; done \
+        s3cmd default-jdk fonts-dejavu-core xvfb curl libsdl2-dev make cmake libssl-dev pngquant chromium; do true; done \
     && echo "    IdentityFile ~/.ssh/id_rsa" >> /etc/ssh/ssh_config \
     && mkdir /onQuit.d \
     && echo 'Xvfb :1 -screen 0 1024x768x16 +extension RANDR &' > /onStart.d/010-start-x-server.sh \
