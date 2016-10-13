@@ -10,8 +10,8 @@ ENV EMSCRIPTEN_VERSION=1.36.11 \
     PATH=$PATH:/nim/bin:/root/.nimble/bin:/emscripten
 
 RUN while ! apt-get update; do true; done \
-    && while ! apt-get install -y gcc g++ mercurial git nodejs libopenal-dev libgtk-3-0 libav-tools iceweasel \
-        s3cmd default-jdk fonts-dejavu-core xvfb curl libsdl2-dev make cmake libssl-dev pngquant chromium libpng-dev pngcrush; do true; done \
+    && while ! apt-get install -y gcc g++ mercurial git nodejs libopenal-dev libgtk-3-0 libav-tools \
+        default-jdk fonts-dejavu-core xvfb curl libsdl2-dev make cmake libssl-dev pngquant chromium libpng-dev pngcrush awscli jq; do true; done \
     && echo "    IdentityFile ~/.ssh/id_rsa" >> /etc/ssh/ssh_config \
     && mkdir /onQuit.d \
     && echo 'Xvfb :1 -screen 0 1024x768x16 +extension RANDR &' > /onStart.d/010-start-x-server.sh \
@@ -49,8 +49,6 @@ RUN while ! apt-get update; do true; done \
     && make install \
     && cd - \
     && rm -r emscripten-fastcomp \
-    && echo "PATCHING EXMSCRIPTEN" \
-    && sed -i.bak 's/pre_js = file_code + pre_js/pre_js = pre_js + file_code/' /emscripten/emcc.py \
     \
     && echo "CLEANUP" \
     && apt-get remove -y cmake curl g++ libpng-dev \
