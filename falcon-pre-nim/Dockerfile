@@ -4,7 +4,7 @@ MAINTAINER Yuriy Glukhov <yuriy.glukhov@gmail.com>
 ADD run.sh /bin/run
 ADD 005-nim-version.sh /onStart.d/005-nim-version.sh
 
-ENV EMSCRIPTEN_VERSION=1.36.11 \
+ENV EMSCRIPTEN_VERSION=1.36.13 \
     LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/ \
     DISPLAY=:1.0 \
     PATH=$PATH:/nim/bin:/root/.nimble/bin:/emscripten
@@ -58,7 +58,8 @@ RUN while ! apt-get update; do true; done \
     && rm -rf /usr/share/doc \
     && rm -rf /usr/share/man \
     && rm -rf /usr/share/locale \
-    && emcc -v && emcc -v
+    && emcc -v && emcc -v \
+    && python /emscripten/embuilder.py build libc dlmalloc libcxxabi libcxx_noexcept
 
 # && echo "DOWNLOADING ANDROID NDK" \
 # && curl -O http://dl.google.com/android/repository/android-ndk-r11c-linux-x86_64.zip \
