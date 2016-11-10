@@ -2,7 +2,7 @@
 set -ev
 
 while ! apt-get update; do true; done
-while ! apt-get install -y gcc g++ mercurial git nodejs libopenal-dev libgtk-3-0 libav-tools unzip ant \
+while ! apt-get install -y gcc g++ mercurial git nodejs libopenal-dev libgtk-3-0 libav-tools unzip ant expect \
         default-jdk fonts-dejavu-core xvfb curl libsdl2-dev make cmake libssl-dev pngquant chromium libpng-dev pngcrush awscli jq; do true; done
 
 mkdir -p /etc/ssh
@@ -70,11 +70,26 @@ installAndroidBuildEnv() {
     mkdir -p ~/Library/Android
     mv android-sdk-linux ~/Library/Android/sdk
     mv $NDK_FILE_NAME ~/Library/Android/sdk/ndk-bundle
+
+    expect -c '
+set timeout -1;
+spawn ~/Library/Android/sdk/tools/android - update sdk --no-ui --filter platform-tools,android-22;
+expect {
+    "Do you accept the license" { exp_send "y\r" ; exp_continue }
+    eof
+}
+'
+}
+
+installSDL() {
+    curl -O https://www.libsdl.org/release/SDL2-2.0.5.tar.gz
+    tar xf SDL2-2.0.5.tar.gz
+    rm SDL2-2.0.5.tar.gz
 }
 
 cleanup() {
     echo "CLEANUP"
-    apt-get remove -y cmake curl g++ libpng-dev unzip
+    apt-get remove -y cmake curl g++ libpng-dev unzip expect
     apt-get autoremove -y
     apt-get clean all
     rm -rf /var/lib/apt/lists/*
@@ -85,6 +100,7 @@ cleanup() {
 }
 
 buildPosterizer
+installSDL
 buildEmscripten
 installAndroidBuildEnv
 cleanup
