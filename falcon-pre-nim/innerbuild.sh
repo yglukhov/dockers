@@ -71,9 +71,11 @@ installAndroidBuildEnv() {
     mv android-sdk-linux ~/Library/Android/sdk
     mv $NDK_FILE_NAME ~/Library/Android/sdk/ndk-bundle
 
+    # Install needed sdk packages by using filter. List of possible packages:
+    # ~/Library/Android/sdk/tools/android list sdk --extended --all --obsolete
     expect -c '
 set timeout -1;
-spawn ~/Library/Android/sdk/tools/android - update sdk --no-ui --filter platform-tools,android-22;
+spawn ~/Library/Android/sdk/tools/android - update sdk --no-ui --filter platform-tools,android-22,android-14,build-tools-25.0.0;
 expect {
     "Do you accept the license" { exp_send "y\r" ; exp_continue }
     eof
