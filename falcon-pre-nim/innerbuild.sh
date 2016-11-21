@@ -3,7 +3,7 @@ set -ev
 
 while ! apt-get update; do true; done
 while ! apt-get install -y gcc g++ mercurial git nodejs libopenal-dev libgtk-3-0 libav-tools unzip ant expect \
-        default-jdk fonts-dejavu-core xvfb curl libsdl2-dev make cmake libssl-dev pngquant chromium libpng-dev pngcrush awscli jq; do true; done
+        default-jdk fonts-dejavu-core xvfb curl libsdl2-dev make cmake libssl-dev pngquant chromium libpng-dev awscli jq; do true; done
 
 mkdir -p /etc/ssh
 echo "    IdentityFile ~/.ssh/id_rsa" >> /etc/ssh/ssh_config
@@ -18,6 +18,17 @@ buildPosterizer() {
     mv ./posterize /bin/
     cd -
     rm -rf mediancut-posterizer
+}
+
+buildPngcrush() {
+    curl -LO https://sourceforge.net/projects/pmt/files/pngcrush/1.8.10/pngcrush-1.8.10.tar.gz/download
+    tar xvf download
+    rm download
+    cd pngcrush-1.8.10
+    make
+    mv ./pngcrush /bin/
+    cd -
+    rm -r pngcrush-1.8.10
 }
 
 buildEmscripten() {
@@ -103,6 +114,7 @@ cleanup() {
 
 buildPosterizer
 installSDL
+buildPngcrush
 buildEmscripten
 installAndroidBuildEnv
 cleanup
