@@ -86,7 +86,7 @@ installAndroidBuildEnv() {
     # ~/Library/Android/sdk/tools/android list sdk --extended --all --obsolete
     expect -c '
 set timeout -1;
-spawn ~/Library/Android/sdk/tools/android - update sdk --no-ui --filter platform-tools,android-22,android-14,build-tools-25.0.0;
+spawn ~/Library/Android/sdk/tools/android - update sdk --no-ui --filter platform-tools,android-19,build-tools-25.0.0;
 expect {
     "Do you accept the license" { exp_send "y\r" ; exp_continue }
     eof
