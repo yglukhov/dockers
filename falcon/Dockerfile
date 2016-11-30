@@ -2,7 +2,8 @@ FROM yglukhov/falcon-pre-nim
 MAINTAINER Yuriy Glukhov <yuriy.glukhov@gmail.com>
 
 # nim-base
-RUN git clone --depth 1 https://github.com/nim-lang/nim.git \
+RUN git clone -b ssl-init-fix --depth 1 https://github.com/yglukhov/Nimrod.git \
+    && mv Nimrod nim \
     && cd nim \
     && git clone --depth 1 https://github.com/nim-lang/csources.git \
     && cd csources \
@@ -10,7 +11,6 @@ RUN git clone --depth 1 https://github.com/nim-lang/nim.git \
     && cd .. \
     && nim c koch \
     && ./koch boot -d:release \
+    && ./koch nimble \
     && cd .. \
-    && git clone --depth 1 https://github.com/nim-lang/nimble.git \
-    && nim c -r nimble/src/nimble install -y 'nimble@#head' \
-    && rm -rf ./nim/nimcache ./nim/compiler/nimcache ./nim/csources ./nimble
+    && rm -rf ./nim/nimcache ./nim/compiler/nimcache ./nim/csources
