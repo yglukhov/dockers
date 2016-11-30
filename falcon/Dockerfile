@@ -2,8 +2,7 @@ FROM yglukhov/falcon-pre-nim
 MAINTAINER Yuriy Glukhov <yuriy.glukhov@gmail.com>
 
 # nim-base
-RUN git clone -b ssl-init-fix --depth 1 https://github.com/yglukhov/Nimrod.git \
-    && mv Nimrod nim \
+RUN git clone --depth 1 https://github.com/nim-lang/nim.git \
     && cd nim \
     && git clone --depth 1 https://github.com/nim-lang/csources.git \
     && cd csources \
