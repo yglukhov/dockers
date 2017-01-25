@@ -7,7 +7,8 @@ while ! apt-get install -y gcc g++ mercurial git nodejs libopenal-dev libgtk-3-0
 
 mkdir -p /etc/ssh
 echo "    IdentityFile ~/.ssh/id_rsa" >> /etc/ssh/ssh_config
-mkdir /onQuit.d
+mkdir /onStart.d /onQuit.d
+
 echo 'Xvfb :1 -screen 0 1024x768x16 +extension RANDR &' > /onStart.d/010-start-x-server.sh
 
 buildPosterizer() {
@@ -21,18 +22,18 @@ buildPosterizer() {
 }
 
 buildPngcrush() {
-    curl -LO https://sourceforge.net/projects/pmt/files/pngcrush/1.8.10/pngcrush-1.8.10.tar.gz/download
+    curl -LO https://sourceforge.net/projects/pmt/files/pngcrush/1.8.11/pngcrush-1.8.11.tar.gz/download
     tar xvf download
     rm download
-    cd pngcrush-1.8.10
+    cd pngcrush-1.8.11
     make
     mv ./pngcrush /bin/
     cd -
-    rm -r pngcrush-1.8.10
+    rm -r pngcrush-1.8.11
 }
 
 buildEmscripten() {
-    EMSCRIPTEN_VERSION=1.36.14
+    EMSCRIPTEN_VERSION=1.37.1
 
     echo "DOWNLOADING EMSCRIPTEN: $EMSCRIPTEN_VERSION"
     curl -LO https://github.com/kripken/emscripten/archive/$EMSCRIPTEN_VERSION.tar.gz
@@ -86,7 +87,7 @@ installAndroidBuildEnv() {
     # ~/Library/Android/sdk/tools/android list sdk --extended --all --obsolete
     expect -c '
 set timeout -1;
-spawn ~/Library/Android/sdk/tools/android update sdk --no-ui --all --filter platform-tools,android-19,build-tools-25.0.0;
+spawn ~/Library/Android/sdk/tools/android update sdk --no-ui --all --filter platform-tools,android-19,android-23,build-tools-25.0.2;
 expect {
     "Do you accept the license" { exp_send "y\r" ; exp_continue }
     eof
