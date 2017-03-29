@@ -2,7 +2,7 @@
 set -ev
 
 while ! apt-get update; do true; done
-while ! apt-get install -y gcc g++ mercurial git nodejs libopenal-dev libgtk-3-0 libav-tools unzip ant expect \
+while ! apt-get install -y gcc g++ mercurial git nodejs libopenal-dev libgtk-3-0 libav-tools unzip expect \
         default-jdk fonts-dejavu-core xvfb curl libsdl2-dev make cmake libssl-dev pngquant chromium libpng-dev awscli jq; do true; done
 
 mkdir -p /etc/ssh
@@ -33,7 +33,7 @@ buildPngcrush() {
 }
 
 buildEmscripten() {
-    EMSCRIPTEN_VERSION=1.37.1
+    EMSCRIPTEN_VERSION=1.37.5
 
     echo "DOWNLOADING EMSCRIPTEN: $EMSCRIPTEN_VERSION"
     curl -LO https://github.com/kripken/emscripten/archive/$EMSCRIPTEN_VERSION.tar.gz
@@ -103,7 +103,7 @@ installSDL() {
 
 cleanup() {
     echo "CLEANUP"
-    apt-get remove -y cmake curl g++ libpng-dev unzip expect
+    apt-get remove -y cmake g++ libpng-dev unzip expect
     apt-get autoremove -y
     apt-get clean all
     rm -rf /var/lib/apt/lists/*
